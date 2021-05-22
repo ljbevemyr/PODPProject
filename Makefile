@@ -6,12 +6,9 @@ CC = mpicc
 CFLAGS = -g -O3
 LIBS = -lm
 
-BIN = ss ssnew
+BIN = ssnew
 
 all: $(BIN)
-
-ss: shearSort.c
-	$(CC) $(CFLAGS) $(LIBS) -o $@ $<
 
 ssnew: shearSortNew.c
 	$(CC) $(CFLAGS) $(LIBS) -o $@ $<
