@@ -1,0 +1,13 @@
+Dim: 1000, Size: 1, Time: 0.510411 seconds
+Dim: 2000, Size: 1, Time: 2.626973 seconds
+Dim: 4000, Size: 1, Time: 13.213156 seconds
+Dim: 8000, Size: 1, Time: 63.338557 seconds
+Dim: 16000, Size: 1, Time: 337.972399 seconds
+--------------------------------------------------------------------------
+Primary job  terminated normally, but 1 process returned
+a non-zero exit code. Per user-direction, the job has been aborted.
+--------------------------------------------------------------------------
+--------------------------------------------------------------------------
+mpiexec noticed that process rank 0 with PID 18459 on node s21 exited on signal 9 (Killed).
+--------------------------------------------------------------------------
+slurmstepd: error: Detected 1 oom-kill event(s) in step 4776926.batch cgroup. Some of your processes may have been killed by the cgroup out-of-memory handler.
