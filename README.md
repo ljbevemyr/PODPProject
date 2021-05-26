@@ -1,6 +1,7 @@
 # PODPProject
 
 A parallel implementation of the shear sort algorithm using MPI communication.
+
 **_NOTE:_**  The number matrix dimensions has to be evenly dividable with the number of processors.
 
 ## Usage
