@@ -63,7 +63,6 @@ int main(int argc, char *argv[]) {
     data = (double*)malloc((dim*dim)*sizeof(double));
     for (i = 0; i < dim*dim; i++){
       fscanf(file, "%lf", &data[i]);
-      printf("data[%d]: %f\n", i, data[i]);
     }
     fclose(file);
   } else {
