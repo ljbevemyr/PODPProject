@@ -24,7 +24,15 @@ Run the code to test correctnes (with printed matrices):
 mpiexec -n <number of processors> ssnew <matrix dimensions> 1
 ```
 ### Test input and output files
-If you want to run the program with a custom inputfile and produce a outputfile with the result.
+If you want to run the program with a custom inputfile and produce a outputfile with the result. The format of the file should only contain the values as doubles listed after each other. As the example below:
+Matrix-format:
+a b c
+d e f
+g h i
+
+File-format for input file:
+a b c d e f g h i
+
 ```bash
 mpiexec -n <number of processors> ssnew <matrix dimensions> x <name of inputfile> <name of outputfile>
 ```
