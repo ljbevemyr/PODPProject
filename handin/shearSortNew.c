@@ -9,7 +9,6 @@
 #include <math.h>
 #include <mpi.h>
 #include <string.h>
-int PIVOT_MODE = 0;
 
 typedef struct Return_data {
   double *data;
@@ -26,29 +25,51 @@ void print_rows(double *data, int matrix_dim, int num_rows, int show_rank);
 void print_col_as_rows(double *data, int matrix_dim, int num_rows, int show_rank);
 
 int main(int argc, char *argv[]) {
-
-  if (argc != 2 && argc != 3){
-    printf("Usage : parqs <distribution> <length> <pivot_mode>\n");
-    return 0;
-  }
   int i, j, k, size, rank, dim, round;
   int print = 0;
   double start_time, end_time;
   double *data;
+  char *input_filename;
+  char *output_filename;
 
-  dim = atoi(argv[1]);
-  if (argc == 3 && dim < 100) print = atoi(argv[2]);
 
   MPI_Init(&argc, &argv);
   MPI_Comm_size(MPI_COMM_WORLD, &size); /* Get the number of PEs*/
   MPI_Comm_rank(MPI_COMM_WORLD, &rank); /* Get my number        */
+
+  if (argc != 2 && argc != 3 && argc != 5){
+    if (rank == 0) {
+      printf("Usage: mpiexec -n <number of processors> ssnew <matrix dimensions> <print> <input file> <output file>\n");
+      printf("       print: 1 if input and output should be printed\n");
+      printf("       input file: The name of the input file (optional)\n");
+      printf("       output file: The name of the output file (optional)\n");
+    }
+    MPI_Finalize();
+    return 0;
+  }
+
+  dim = atoi(argv[1]);
+  if (argc >= 3 && dim < 100) print = atoi(argv[2]);
 
   if (dim%size != 0){
     printf("The matrix-dimensions has to be eqally dividable with the number of processes\n");
     return 0;
   }
 
-  if (rank == 0) data = matrix_maker(dim);
+  if (rank == 0 && argc == 5) {
+    input_filename = argv[3];
+    output_filename = argv[4];
+    FILE *file = fopen(input_filename, "r");
+    data = (double*)malloc((dim*dim)*sizeof(double));
+    for (i = 0; i < dim*dim; i++){
+      fscanf(file, "%lf", &data[i]);
+      printf("data[%d]: %f\n", i, data[i]);
+    }
+    fclose(file);
+  } else {
+    if (rank == 0) data = matrix_maker(dim);
+  }
+
   if (print && rank == 0) print_rows(data, dim, dim, 0);
 
   // Start timer
@@ -146,6 +167,18 @@ int main(int argc, char *argv[]) {
   end_time = MPI_Wtime();
   if (rank == 0) printf("Dim: %d, Size: %d, Time: %f seconds\n", dim, size, end_time-start_time);
   if (print && rank == 0) print_col_as_rows(data, dim, dim, 0);
+
+  if (rank == 0 && argc == 5){
+    FILE *output_file = fopen(output_filename, "w");
+
+    for (i = 0; i < dim; i++){
+      for (j = 0; j < dim; j++) {
+        fprintf(output_file, "%lf ", data[j*dim+i]);
+      }
+      fprintf(output_file, "\n");
+    }
+    fclose(output_file);
+  }
 
   free(proc_data_col);
   free(proc_data_row);

@@ -21,6 +21,10 @@ Run the code to test correctnes (with printed matrices):
 ```bash
 mpiexec -n <number of processors> ssnew <matrix dimensions> 1
 ```
+If you want to run the program with a custom inputfile and produce a outputfile with the result.
+```bash
+mpiexec -n <number of processors> ssnew <matrix dimensions> 1 <name of inputfile> <name of outputfile>
+```
 
 ## Author
 Lisa Bevemyr
